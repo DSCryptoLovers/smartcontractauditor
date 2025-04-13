@@ -1,6 +1,6 @@
 # Solana-Audit: AI-Powered Smart Contract Auditor
 
-An advanced AI-powered auditor for detecting vulnerabilities in smart contracts on both **Solana (Rust/Anchor)** and **Ethereum (Solidity)** platforms. This project leverages a fine-tuned transformer (CodeBERT) alongside static analysis to provide detailed, actionable audit reports.
+An advanced AI-powered auditor for detecting vulnerabilities in smart contracts mainly **Solana (Rust/Anchor)** and **Ethereum (Solidity)** is also available to help others out. This project leverages a fine-tuned transformer (CodeBERT) alongside static analysis to provide detailed, actionable audit reports.
 
 ## Table of Contents
 - [Features](#features)
