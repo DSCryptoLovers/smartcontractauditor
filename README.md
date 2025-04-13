@@ -3,55 +3,44 @@
 An advanced AI-powered auditor for detecting vulnerabilities in smart contracts on both **Solana (Rust/Anchor)** and **Ethereum (Solidity)** platforms. This project leverages a fine-tuned transformer (CodeBERT) alongside static analysis to provide detailed, actionable audit reports.
 
 ## Table of Contents
-
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
-  - [Training the Model](#training-the-model)
-  - [Running an Audit](#running-an-audit)
 - [Project Structure](#project-structure)
 - [Dependencies](#dependencies)
 - [Contributing](#contributing)
 - [License](#license)
 
 ## Features
-
 - **Dual-Platform Support:** Audits both Solidity (EVM) and Solana (Rust/Anchor) smart contracts.
-- **ML-Based Vulnerability Detection:** Fine-tuned transformer (CodeBERT) classifier to detect vulnerabilities.
-- **Hybrid Analysis:** Combines ML predictions with rule-based static analysis for comprehensive results.
-- **Detailed Reporting:** Generates vulnerability scores and detailed breakdowns with actionable insights.
-- **Continuous Improvement:** Designed to incorporate user feedback and active learning to update the training data.
+- **ML-Based Vulnerability Detection:** Fine-tuned transformer (CodeBERT) classifier.
+- **Hybrid Analysis:** Combines ML predictions with static analysis.
+- **Detailed Reporting:** Provides vulnerability scores and actionable insights.
+- **Continuous Improvement:** Incorporates user feedback and active learning.
 
 ## Installation
-
-### Prerequisites
-
-- Python 3.10+
-- A Linux-like environment is recommended (WSL works well on Windows)
-- Virtual Environment (recommended)
-
-### Clone the Repository
 
 ```bash
 git clone https://github.com/yourusername/solana-audit.git
 cd solana-audit
 
-Create and Activate a Virtual Environment
+# Create and Activate a Virtual Environment
 
-On Linux/WSL/macOS:
-
+# Linux/WSL/macOS
 python3 -m venv venv
 source venv/bin/activate
 
-On Windows (Command Prompt):
-
+# Windows (Command Prompt)
 python -m venv venv
 venv\Scripts\activate
 
-Install Dependencies
+# Install Dependencies
+pip install -r requirements.txt
+```
 
-Ensure your requirements.txt file contains the following:
+Ensure your `requirements.txt` file contains:
 
+```
 blinker==1.9.0
 click==8.1.8
 colorama==0.4.6
@@ -70,95 +59,88 @@ torch==2.2.2
 requests==2.32.2
 accelerate>=0.26.0
 datasets==3.5.0
+```
 
-Then run:
+## Usage
 
-pip install -r requirements.txt
+### Training the Model
 
-Usage
-Training the Model
-Prepare the Dataset:
-Ensure your dataset file is placed at data/vulnerabilities.csv and is formatted as follows:
+Place your dataset at `data/vulnerabilities.csv` formatted as:
 
+```csv
 "code","label"
-"pragma solidity ^0.8.0;
-contract ReentrancyAttack {
-    // multi-line code here...
-}",1
-"pragma solidity ^0.8.0;
-contract SafeVault {
-    // multi-line code here...
-}",0
+"pragma solidity ^0.8.0;\ncontract ReentrancyAttack {\n    // code...\n}",1
+"pragma solidity ^0.8.0;\ncontract SafeVault {\n    // code...\n}",0
+```
 
-Run the Training Script:
+Run the training script:
 
+```bash
 python train_codebert.py
+```
 
-The script will:
+### Running an Audit
 
-Load and clean the CSV data.
+#### CLI Audit
 
-Create HuggingFace datasets.
-
-Fine-tune CodeBERT.
-
-Evaluate the model and save it to the fine_tuned_codebert directory.
-
-Running an Audit
-After training, you can run an audit on a contract through one of two methods:
-
-Command-Line Audit
-If you have a CLI audit script (e.g., audit.py), run:
-
+```bash
 python audit.py --contract path/to/your_contract.sol
+```
 
-Web Dashboard (Optional)
-If using a Flask-based dashboard:
+#### Flask Dashboard
 
-Set the Flask entry point:
+```bash
+# Activate virtual environment
+source venv/bin/activate
 
-export FLASK_APP=app.py
+# Set Flask app environment
+# Linux/WSL
+export FLASK_APP=frontend/app.py
 
-Run the dashboard:
+# Windows (Command Prompt)
+set FLASK_APP=frontend/app.py
 
+# Run Flask Dashboard
 flask run
+```
 
-Open your browser at http://127.0.0.1:5000 and upload a contract file.
+Open [http://127.0.0.1:5000](http://127.0.0.1:5000).
 
-Project Structure
+## Project Structure
 
+```
 solana-audit/
-├── app.py                   # (Optional) Flask web interface
-├── audit.py                 # (Optional) CLI tool for audits
+├── frontend/
+│   └── app.py
+├── audit.py
 ├── data/
-│   └── vulnerabilities.csv  # Labeled dataset of smart contracts (code, label)
-├── fine_tuned_codebert/     # Directory for the saved fine-tuned model
-├── requirements.txt         # Project dependencies
-├── train_codebert.py        # Training script for the CodeBERT classifier
-└── README.md                # This documentation file
+│   └── vulnerabilities.csv
+├── fine_tuned_codebert/
+├── requirements.txt
+├── train_codebert.py
+└── README.md
+```
 
-Dependencies
-Key dependencies include:
+## Dependencies
+- **PyTorch**
+- **Transformers & Datasets**
+- **Accelerate**
+- **scikit-learn**
+- **Flask**
+- **joblib, numpy, pandas**
 
-PyTorch: The backend for transformer models.
+## Contributing
 
-Transformers & Datasets: For model fine-tuning and data processing.
+Open issues or submit pull requests with improvements or features.
 
-Accelerate: For efficient training hardware management.
+## License
 
-scikit-learn: For data splitting and metric calculations.
+MIT License
 
-Flask: (Optional) For providing a web dashboard.
+## Final Instructions
 
-Contributing
-
-Contributions are welcome! Please open issues or submit pull requests with bug fixes, enhancements, or new features. See the CONTRIBUTING.md file for guidelines.
-
-License
-This project is licensed under the MIT License.
-
-## Final Notes
-
-- Follow the instructions above to set up your environment, train the model, and run audits.
-- Ensure that your dataset (`data/vulnerabilities.csv`) follows the prescribed format.
-- For further instructions, refer to this README.
+1. Clone the repo and set up your environment.
+2. Install dependencies: `pip install -r requirements.txt`
+3. Prepare your dataset at `data/vulnerabilities.csv`.
+4. Run the training script: `python train_codebert.py`
+5. Audit contracts using CLI or Flask Dashboard.
